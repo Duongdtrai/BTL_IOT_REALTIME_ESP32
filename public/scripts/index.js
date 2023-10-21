@@ -29,6 +29,7 @@ function plotValues(chart, timestamp, value) {
 
 // DOM elements
 const loginElement = document.querySelector('#login-form');
+const registerElement = document.querySelector('#register-form');
 const contentElement = document.querySelector("#content-sign-in");
 const userDetailsElement = document.querySelector('#user-details');
 const authBarElement = document.querySelector('#authentication-bar');
@@ -56,13 +57,21 @@ const updateElement = document.getElementById("lastUpdate")
 // MANAGE LOGIN/LOGOUT UI
 const setupUI = (user) => {
     if (user) {
+        if (registerElement && !loginElement) {
+            registerElement.style.display = 'none';
+            window.location.href = 'index.html';
+            return;
+        }
+
         //toggle UI elements
         loginElement.style.display = 'none';
+
         contentElement.style.display = 'block';
         authBarElement.style.display = 'block';
         userDetailsElement.style.display = 'block';
         userDetailsElement.innerHTML = user.email;
 
+        console.log(2)
         // get user UID to get data from database
         var uid = user.uid;
         console.log(uid);
@@ -281,6 +290,10 @@ const setupUI = (user) => {
         // IF USER IS LOGGED OUT
     } else {
         // toggle UI elements
+        if (registerElement && !loginElement) {
+            registerElement.style.display = 'block';
+            return;
+        }
         loginElement.style.display = 'block';
         authBarElement.style.display = 'none';
         userDetailsElement.style.display = 'none';

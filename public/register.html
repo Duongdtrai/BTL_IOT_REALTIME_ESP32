@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ESP Datalogging Firebase App</title>
+
+    <!-- include Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
+
+    <!-- include only the Firebase features as you need -->
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-database.js"></script>
+
+
+
+    <!-- include to use jquery-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--include icons from fontawesome-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- include Gauges Javascript library-->
+    <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
+    <!--reference for favicon-->
+    <link rel="icon" type="image/png" href="favicon.png">
+    <!--reference a stylesheet-->
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script>
+        // Replace with your app config object
+        const firebaseConfig = {
+            apiKey: "AIzaSyCAx3QAAZCVzX4Swg7TluMLsZEgbNpSUb0",
+            authDomain: "esp32-temperature-real-time.firebaseapp.com",
+            projectId: "esp32-temperature-real-time",
+            storageBucket: "esp32-temperature-real-time.appspot.com",
+            messagingSenderId: "92656498925",
+            appId: "1:92656498925:web:b0eda228582b527d2734e4",
+            measurementId: "G-J8BF5D6GN5"
+        };
+
+
+        // Initialize firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Make auth and database references
+        const auth = firebase.auth();
+        const db = firebase.database();
+    </script>
+
+</head>
+
+<body>
+
+    <!--TOP BAR-->
+    <div class="topnav">
+        <h1>Sensor Readings App <i class="fas fa-clipboard-list"></i></h1>
+    </div>
+
+    <!--REGISTER FORM-->
+    <form id="register-form">
+        <div class="form-elements-container">
+            <label for="input-email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Username" id="input-email" required>
+
+            <label for="input-password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" id="input-password" required>
+
+            <label for="input-confirm-password"><b>Re Password</b></label>
+            <input type="password" placeholder="Enter Password" id="input-confirm-password" required>
+
+            <button type="submit" id="login-button">Register</button>
+            <p id="error-message" style="color:red;"></p>
+        </div>
+    </form>
+
+    <!--INCLUDE JS FILES-->
+    <script src="scripts/register.js"></script>
+    <script src="scripts/index.js"></script>
+</body>
+
+</html>
