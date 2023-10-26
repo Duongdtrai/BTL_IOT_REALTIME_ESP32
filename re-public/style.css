@@ -1,0 +1,10 @@
+.form-outline input.form-control {
+    /* border: 1px solid #bdbdbd; */
+}
+div.card{
+    max-width: 1000px;
+    @media (min-width: 992px) {
+        margin-right: auto!important;
+        margin-left: auto!important;
+    }
+}
