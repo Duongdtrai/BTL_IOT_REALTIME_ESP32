@@ -1,5 +1,5 @@
 .form-outline input.form-control {
-    /* border: 1px solid #bdbdbd; */
+    background-color: rgba(211, 211, 211, 0.22);
 }
 div.card{
     max-width: 1000px;
