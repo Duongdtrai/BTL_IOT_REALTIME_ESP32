@@ -5,16 +5,20 @@ Trong thế giới kết nối ngày nay, việc thu thập và truy cập dữ 
 
 ## Ứng Dụng
 Dự án này có thể được áp dụng trong nhiều ứng dụng thực tế như:
-- **Theo dõi Thời Tiết:**
-  - Theo dõi nhiệt độ và độ ẩm trong thời gian thực để cung cấp thông tin thời tiết chính xác và đáng tin cậy.
-- **Quản lý Môi Trường:**
-  - Sử dụng trong các môi trường như phòng server, nhà máy để đảm bảo rằng điều kiện môi trường được duy trì ổn định.
-- **Nghiên Cứu Khoa Học:**
-  - Được sử dụng trong các nghiên cứu về khí hậu và môi trường.
+
+- **Bảo Quản Thực Phẩm**:
+Trong ngành thực phẩm, việc duy trì nhiệt độ và độ ẩm chính xác là quan trọng để đảm bảo thực phẩm không bị hỏng. Ứng dụng này có thể giúp theo dõi điều kiện lưu trữ thực phẩm và cảnh báo nếu có bất kỳ sự biến đổi nào.
+
+- **Tự Động Hóa Nhà Thông Minh**:
+Trong các hệ thống nhà thông minh, việc theo dõi nhiệt độ và độ ẩm có thể được sử dụng để điều khiển hệ thống làm mát, đèn và các thiết bị khác để tối ưu hóa sự thoải mái và tiết kiệm năng lượng.
+	
+- **Theo Dõi Thời Tiết Trong Nhà**:
+Dự án này có thể được sử dụng để theo dõi thời tiết trong nhà như hiển thị nhiệt độ và độ ẩm trong phòng. Điều này hữu ích cho việc quyết định liệu có cần bật máy lạnh hoặc máy sưởi trong các phòng riêng lẻ.
+Được sử dụng trong các nghiên cứu về khí hậu và môi trường.
 
 ## Dụng Cụ Cần Chuẩn Bị
 - **ESP32 Board:** Đây là vi điều khiển được sử dụng để thu thập dữ liệu từ cảm biến và gửi lên Firebase.
-- **BME280 Sensor:** Cảm biến này được sử dụng để đo nhiệt độ, độ ẩm và áp suất.
+- **DHT22 Sensor:** Cảm biến này được sử dụng để đo nhiệt độ, độ ẩm.
 - **Đèn LED (Tùy Chọn):** Đèn LED có thể được sử dụng để hiển thị trạng thái hoạt động của thiết bị.
 - **Dây Cắm và Kết Nối Cần Thiết.**
 
@@ -28,7 +32,7 @@ Dự án này có thể được áp dụng trong nhiều ứng dụng thực t�
    - Tạo một dự án trên Firebase và thiết lập một ứng dụng web để nhận API keys và các thông tin khác.
 
 2. **Xây Dựng Mạch Vật Lý:**
-   - Kết nối ESP32 với cảm biến BME280 và thiết lập các kết nối cần thiết.
+   - Kết nối ESP32 với cảm biến DHT22 và thiết lập các kết nối cần thiết.
 
 3. **Lập Trình ESP32:**
    - Lập trình ESP32 để đọc dữ liệu từ cảm biến và gửi lên Firebase Realtime Database sau khi xác thực người dùng.
