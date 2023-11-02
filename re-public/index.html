@@ -101,14 +101,68 @@
           <!-- Left links -->
 
           <div class="d-flex align-items-center">
-            <a href="./login.html" class="btn btn-link px-3 me-2">Login</a>
-            <a
-              href="./register.html"
-              type="button"
-              class="btn btn-primary me-3"
+            <nav
+              class="navbar navbar-expand-lg navbar-light bg-light p-0 shadow-0"
             >
-              Sign up for free
-            </a>
+              <div class="container-fluid">
+                <ul class="navbar-nav">
+                  <!-- Avatar -->
+                  <li class="nav-item dropdown">
+                    <a
+                      class="nav-link dropdown-toggle d-flex align-items-center"
+                      href="#"
+                      id="navbarDropdownMenuLink"
+                      role="button"
+                      data-mdb-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <img
+                        src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp"
+                        class="rounded-circle"
+                        height="22"
+                        alt="Portrait of a Woman"
+                        loading="lazy"
+                      />
+                    </a>
+                    <ul
+                      class="dropdown-menu"
+                      aria-labelledby="navbarDropdownMenuLink"
+                    >
+                      <li>
+                        <!--AUTHENTICATION BAR (USER DETAILS/LOGOUT BUTTON)-->
+                        <div id="authentication-bar" class="dropdown-item" style="display: none">
+                          <p>
+                            <span id="authentication-status"
+                              >User logged in</span
+                            >
+                            <span id="user-details">USEREMAIL</span>
+                          </p>
+                        </div>
+                      </li>
+                      <!-- <li>
+                        <a class="dropdown-item" href="/" id="logout-link">Logout</a>
+                      </li> -->
+                    </ul>
+                    <!-- <ul
+                      class="dropdown-menu"
+                      aria-labelledby="navbarDropdownMenuLink"
+                    >
+                      <li>
+                        <a class="dropdown-item" href="#">My profile</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">Settings</a>
+                      </li>
+                      <li>
+                        <a class="dropdown-item" href="#">Logout</a>
+                      </li>
+                    </ul>
+                     -->
+                  </li>
+                </ul>
+              </div>
+            </nav>
+            <button type="button" class="btn btn-primary me-3"  href="/" id="logout-link">Logout</button>
             <a
               class="btn btn-dark px-3"
               href="https://github.com/Duongdtrai/BTL_IOT_REALTIME_ESP32"
@@ -123,103 +177,6 @@
       <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
-
-    <!-- Section: Login form -->
-    <section class="text-center">
-      <!-- Background image -->
-      <div
-        class="p-5 bg-image"
-        style="
-          background-image: url('https://mdbootstrap.com/img/new/textures/full/171.jpg');
-          height: 300px;
-        "
-      ></div>
-      <!-- Background image -->
-
-      <div
-        class="card mx-4 mx-md-5 shadow-5-strong"
-        style="
-          margin-top: -100px;
-          background: hsla(0, 0%, 100%, 0.8);
-          backdrop-filter: blur(30px);
-        "
-      >
-        <div class="card-body py-5 px-md-5">
-          <div class="row d-flex justify-content-center">
-            <div class="col-lg-8">
-              <h2 class="fw-bold mb-5">Login</h2>
-              <form id="login-form">
-                <!-- Email input -->
-                <div class="form-outline mb-4">
-                  <input type="email" id="input-email" class="form-control" />
-                  <label class="form-label" for="input-email"
-                    >Email address</label
-                  >
-                </div>
-
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <input
-                    type="password"
-                    id="input-password"
-                    class="form-control"
-                  />
-                  <label class="form-label" for="input-password"
-                    >Password</label
-                  >
-                </div>
-
-                <!-- Error messages -->
-                <p id="error-message" class="text-danger mb-4"></p>
-
-                <!-- Checkbox -->
-                <div class="form-check d-flex mb-4">
-                  <input
-                    class="form-check-input me-2"
-                    type="checkbox"
-                    value=""
-                    id="form2Example33"
-                  />
-                  <label class="form-check-label" for="form2Example33">
-                    Remember me
-                  </label>
-                </div>
-
-                <!-- Submit button -->
-                <button
-                  type="submit"
-                  id="login-button"
-                  class="btn btn-primary btn-block mb-4"
-                >
-                  Login
-                </button>
-
-                <!-- Register buttons -->
-                <div class="text-center">
-                  <p>or login with:</p>
-                  <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-facebook-f"></i>
-                  </button>
-
-                  <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-google"></i>
-                  </button>
-
-                  <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-twitter"></i>
-                  </button>
-
-                  <button type="button" class="btn btn-link btn-floating mx-1">
-                    <i class="fab fa-github"></i>
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!-- Section: Login form -->
 
     <!--AUTHENTICATION BAR (USER DETAILS/LOGOUT BUTTON)-->
     <div id="authentication-bar" style="display: none">

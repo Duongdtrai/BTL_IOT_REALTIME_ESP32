@@ -147,9 +147,9 @@
         <div class="row d-flex justify-content-center">
           <div class="col-lg-8">
             <h2 class="fw-bold mb-5">Sign up now</h2>
-            <form>
+            <form id="register-form">
               <!-- 2 column grid layout with text inputs for the first and last names -->
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-outline">
                     <input
@@ -174,12 +174,12 @@
                     >
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Email input -->
               <div class="form-outline mb-4">
-                <input type="email" id="form3Example3" class="form-control" />
-                <label class="form-label" for="form3Example3"
+                <input type="email" id="input-email" class="form-control" required/>
+                <label class="form-label" for="input-email"
                   >Email address</label
                 >
               </div>
@@ -188,23 +188,26 @@
               <div class="form-outline mb-4">
                 <input
                   type="password"
-                  id="form3Example4"
+                  id="input-password"
                   class="form-control"
+                  required
                 />
-                <label class="form-label" for="form3Example4">Password</label>
+                <label class="form-label" for="input-password">Password</label>
               </div>
 
               <!-- Password confirm input -->
               <div class="form-outline mb-4">
                 <input
                   type="passwordConfirm"
-                  id="form3Example5"
+                  id="input-confirm-password"
                   class="form-control"
+                  required
                 />
-                <label class="form-label" for="form3Example5">Confirm Password</label>
+                <label class="form-label" for="input-confirm-password">Confirm Password</label>
               </div>
 
-              
+              <!-- Error messages -->
+              <p id="error-message" class="text-danger mb-4"></p>
 
               <!-- Checkbox -->
             <div class="form-check d-flex mb-4">
@@ -215,7 +218,7 @@
               </div>
 
               <!-- Submit button -->
-              <button type="submit" class="btn btn-primary btn-block mb-4">
+              <button type="submit" id="login-button" class="btn btn-primary btn-block mb-4">
                 Sign up
               </button>
 
