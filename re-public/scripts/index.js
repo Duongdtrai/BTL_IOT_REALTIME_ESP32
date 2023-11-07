@@ -53,7 +53,6 @@ const tempElement = document.getElementById("temp");
 const humElement = document.getElementById("hum");
 const presElement = document.getElementById("pres");
 const updateElement = document.getElementById("lastUpdate")
-
 // MANAGE LOGIN/LOGOUT UI
 const setupUI = (user) => {
     if (user) {
@@ -68,10 +67,12 @@ const setupUI = (user) => {
         contentElement.style.display = 'block';
         authBarElement.style.display = 'block';
         userDetailsElement.style.display = 'block';
+        // navbarLoginElement.style.display = 'none';
         userDetailsElement.innerHTML = user.email;
-        document.getElementById('logout-link').style.display = 'block'
-        document.getElementById('login-link-group').style.display = 'none'
 
+        document.getElementById('logout-link').style.display = 'block'
+        document.getElementById('login-link-group').style.display = 'none';
+        document.getElementById('login-link-group').className = '';
         console.log(2)
         // get user UID to get data from database
         var uid = user.uid;
