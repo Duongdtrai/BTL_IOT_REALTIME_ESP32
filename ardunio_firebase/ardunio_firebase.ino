@@ -4,33 +4,42 @@
   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
   The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-
-#include <Arduino.h>
 #include <WiFi.h>
 #include <Firebase_ESP_Client.h>
-#include <Wire.h>
-#include <Adafruit_Sensor.h>
+#include "DHT.h"
 #include <Adafruit_BME280.h>
-#include "time.h"
 
-// Provide the token generation process info.
+//======================================== Defines the pin and type of DHT sensor and initializes the DHT sensor.
+#define DHTPIN 2
+#define DHTTYPE DHT22
+DHT dht(DHTPIN, DHTTYPE);
+//========================================
+
+// Defines the Digital Pin of the "On Board LED".
+#define On_Board_LED 2
+
+// Defines the Digital Pin of the LED.
+#define LED_01_PIN 13
+
+//Provide the token generation process info.
 #include "addons/TokenHelper.h"
-// Provide the RTDB payload printing info and other helper functions.
+
+//Provide the RTDB payload printing info and other helper functions.
 #include "addons/RTDBHelper.h"
 
 // Insert your network credentials
-#define WIFI_SSID "REPLACE_WITH_YOUR_SSID"
-#define WIFI_PASSWORD "REPLACE_WITH_YOUR_PASSWORD"
+#define WIFI_SSID "PhamTungDuong"
+#define WIFI_PASSWORD "0969613858"
 
 // Insert Firebase project API Key
-#define API_KEY "REPLACE_WITH_YOUR_PROJECT_API_KEY"
+#define API_KEY "AIzaSyCAx3QAAZCVzX4Swg7TluMLsZEgbNpSUb0"
 
 // Insert Authorized Email and Corresponding Password
-#define USER_EMAIL "REPLACE_WITH_THE_USER_EMAIL"
-#define USER_PASSWORD "REPLACE_WITH_THE_USER_PASSWORD"
+#define USER_EMAIL "d@gmail.com"
+#define USER_PASSWORD "123456"
 
 // Insert RTDB URLefine the RTDB URL
-#define DATABASE_URL "REPLACE_WITH_YOUR_DATABASE_URL"
+#define DATABASE_URL "https://esp32-temperature-real-time-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
 // Define Firebase objects
 FirebaseData fbdo;
@@ -57,7 +66,7 @@ FirebaseJson json;
 const char* ntpServer = "pool.ntp.org";
 
 // BME280 sensor
-Adafruit_BME280 bme; // I2C
+Adafruit_BME280 bme;  // I2C
 float temperature;
 float humidity;
 float pressure;
@@ -67,10 +76,11 @@ unsigned long sendDataPrevMillis = 0;
 unsigned long timerDelay = 180000;
 
 // Initialize BME280
-void initBME(){
+void initBME() {
   if (!bme.begin(0x76)) {
     Serial.println("Could not find a valid BME280 sensor, check wiring!");
-    while (1);
+    while (1)
+      ;
   }
 }
 
@@ -92,17 +102,18 @@ unsigned long getTime() {
   struct tm timeinfo;
   if (!getLocalTime(&timeinfo)) {
     //Serial.println("Failed to obtain time");
-    return(0);
+    return (0);
   }
   time(&now);
   return now;
 }
 
-void setup(){
-  Serial.begin(115200);
+void setup() {
 
+  Serial.begin(115200);
+  Serial.println("Duong");
   // Initialize BME280 sensor
-  initBME();
+  // initBME();
   initWiFi();
   configTime(0, 0, ntpServer);
 
@@ -120,7 +131,7 @@ void setup(){
   fbdo.setResponseSize(4096);
 
   // Assign the callback function for the long running token generation task */
-  config.token_status_callback = tokenStatusCallback; //see addons/TokenHelper.h
+  config.token_status_callback = tokenStatusCallback;  //see addons/TokenHelper.h
 
   // Assign the maximum retry of token generation
   config.max_token_generation_retry = 5;
@@ -141,19 +152,47 @@ void setup(){
 
   // Update database path
   databasePath = "/UsersData/" + uid + "/readings";
+  dht.begin();
 }
 
-void loop(){
+void loop() {
+  float temperatureDHT22 = dht.readTemperature();
+  // float humidityDHT22 = dht.readHumidity();
+  // Kiểm tra nếu giá trị nhiệt độ hợp lý (không bằng NaN)
+ if (!isnan(temperatureDHT22) ) {
+    // In giá trị nhiệt độ và độ ẩm ra Serial Monitor
+    Serial.print("Temperature from DHT22: ");
+    Serial.println(temperatureDHT22);
+    // Serial.print("Humidity from DHT22: ");
+    // Serial.println(humidityDHT22);
+
+    // Các thao tác khác có thể được thực hiện ở đây, ví dụ: gửi nhiệt độ và độ ẩm đọc được đến Firebase.
+  } else {
+    Serial.println("Failed to read temperature or humidity from DHT22");
+  }
 
   // Send new readings to database
-  if (Firebase.ready() && (millis() - sendDataPrevMillis > timerDelay || sendDataPrevMillis == 0)){
+  if (Firebase.ready() && (millis() - sendDataPrevMillis > timerDelay || sendDataPrevMillis == 0)) {
     sendDataPrevMillis = millis();
 
     //Get current timestamp
     timestamp = getTime();
-    Serial.print ("time: ");
-    Serial.println (timestamp);
+    Serial.print("time: ");
+    Serial.println(timestamp);
 
-    parentPath= databasePath + "/" + String(timestamp);
+    parentPath = databasePath + "/" + String(timestamp);
 
-    js
+    // json.set(tempPath.c_str(), String(bme.readTemperature()));
+    // json.set(humPath.c_str(), String(bme.readHumidity()));
+    // json.set(presPath.c_str(), String(bme.readPressure()/100.0F));
+
+
+    json.set(tempPath.c_str(), String(temperatureDHT22));
+    json.set(humPath.c_str(), String(random(1, 101)));
+    json.set(presPath.c_str(), String(random(1, 101)));
+
+
+    json.set(timePath, String(timestamp));
+    Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, parentPath.c_str(), &json) ? "ok" : fbdo.errorReason().c_str());
+  }
+}
