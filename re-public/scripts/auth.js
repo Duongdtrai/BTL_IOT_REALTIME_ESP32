@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	auth.onAuthStateChanged(user => {
 		if (user) {
 			console.log("user logged in");
-			console.log(user);
 			setupUI(user);
 			var uid = user.uid;
 			console.log(uid);

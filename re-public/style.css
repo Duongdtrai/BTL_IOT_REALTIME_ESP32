@@ -1,10 +1,10 @@
 .form-outline input.form-control {
-    background-color: rgba(211, 211, 211, 0.22);
+    /* background-color: rgba(211, 211, 211, 0.22); */
 }
 div.card{
-    max-width: 1000px;
+    /* max-width: 1000px;
     @media (min-width: 992px) {
         margin-right: auto!important;
         margin-left: auto!important;
-    }
+    } */
 }

@@ -28,7 +28,7 @@ function plotValues(chart, timestamp, value) {
 }
 
 // DOM elements
-const loginElement = document.querySelector('#login-form');
+const loginElement = document.querySelector('#login-section');
 const registerElement = document.querySelector('#register-form');
 const contentElement = document.querySelector("#content-sign-in");
 const userDetailsElement = document.querySelector('#user-details');
@@ -65,11 +65,12 @@ const setupUI = (user) => {
 
         //toggle UI elements
         loginElement.style.display = 'none';
-
         contentElement.style.display = 'block';
         authBarElement.style.display = 'block';
         userDetailsElement.style.display = 'block';
         userDetailsElement.innerHTML = user.email;
+        document.getElementById('logout-link').style.display = 'block'
+        document.getElementById('login-link-group').style.display = 'none'
 
         console.log(2)
         // get user UID to get data from database
@@ -298,5 +299,7 @@ const setupUI = (user) => {
         authBarElement.style.display = 'none';
         userDetailsElement.style.display = 'none';
         contentElement.style.display = 'none';
+        document.getElementById('logout-link').style.display = 'none'
+        document.getElementById('login-link-group').style.display = 'block'
     }
 }
