@@ -340,10 +340,10 @@
       <!--Hide data button-->
       <button id="hide-data-button" class="btn btn-info" style="display: none">Hide data</button>
       <!--Delete data button-->
-      <button id="delete-button" class="btn btn-danger">Delete data</button>
+      <button id="delete-button" class="btn btn-danger" data-mdb-toggle="modal" data-mdb-target="#delete-modal">Delete data</button>
     </p>
     <!--Modal to delete data-->
-    <div id="delete-modal" class="modal" sytle="display:none">
+    <!-- <div id="delete-modal" class="modal" sytle="display:none">
       <span onclick="document.getElementById('delete-modal').style.display='none'" class="close"
         title="Close Modal">×</span>
       <form id="delete-data-form" class="modal-content" action="/">
@@ -362,6 +362,23 @@
           </div>
         </div>
       </form>
+    </div> -->
+    <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirm modal</h5>
+            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">Are you sure you want to delete all data from database?</div>
+          <div class="modal-footer">
+            <form id="delete-data-form">
+              <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary" data-mdb-dismiss="modal">Delete data</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!--TABLE WITH ALL DATA-->

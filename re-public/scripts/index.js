@@ -195,6 +195,7 @@ const setupUI = (user) => {
         // Add event listener when delete form is submited
         deleteDataFormElement.addEventListener('submit', (e) => {
             // delete data (readings)
+            e.preventDefault()
             dbRef.remove();
         });
 
