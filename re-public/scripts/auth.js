@@ -28,7 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			.catch((error) => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-				document.getElementById("error-message").innerHTML = errorMessage;
+				document.getElementById("error-message").innerText = "Email and password incorrect.";
+				document.getElementById("error-message").classList.add("alert", "alert-danger");
+				// document.getElementById("error-message").innerHTML = errorMessage;
 				console.log(errorMessage);
 			});
 	});

@@ -3,7 +3,7 @@
     "rules": "y"
   },
   "hosting": {
-    "public": "public",
+    "public": "re-public",
     "ignore": [
       "firebase.json",
       "**/.*",

@@ -82,15 +82,16 @@
         </ul>
         <!-- Left links -->
         <div class="d-flex align-items-center">
-          <nav class="navbar navbar-expand-lg navbar-light bg-light p-0 shadow-0" id="authentication-bar" style="display: none">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light p-0 shadow-0" id="authentication-bar"
+            style="display: none">
             <div class="container-fluid">
               <ul class="navbar-nav">
                 <!-- Avatar -->
                 <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink" role="button"
-                    data-mdb-toggle="dropdown" aria-expanded="false">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp" class="rounded-circle" height="22" alt="Portrait of a Woman"
-                      loading="lazy" />
+                  <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink"
+                    role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img (31).webp" class="rounded-circle"
+                      height="22" alt="Portrait of a Woman" loading="lazy" />
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                     <li>
@@ -118,10 +119,11 @@
                 Sign up for free
               </a>
             </div>
-            <button type="button" class="btn btn-primary me-3" href="/" id="logout-link" style="display: none;">Logout</button>
+            <button type="button" class="btn btn-primary me-3" href="/" id="logout-link"
+              style="display: none;">Logout</button>
           </div>
-          <a class="btn btn-dark px-3" href="https://github.com/Duongdtrai/BTL_IOT_REALTIME_ESP32" role="button" target="”_blank”"><i
-              class="fab fa-github"></i></a>
+          <a class="btn btn-dark px-3" href="https://github.com/Duongdtrai/BTL_IOT_REALTIME_ESP32" role="button"
+            target="”_blank”"><i class="fab fa-github"></i></a>
         </div>
       </div>
       <!-- Collapsible wrapper -->
@@ -251,7 +253,7 @@
                   <span class="reading"><span id="hum"></span> &percnt;</span>
                 </p>
               </div>
-            </div>          
+            </div>
           </div>
         </div>
         <!--PRESSURE-->
@@ -269,7 +271,7 @@
                   <span class="reading"><span id="pres"></span> hPa</span>
                 </p>
               </div>
-            </div>   
+            </div>
           </div>
         </div>
       </div>
@@ -311,7 +313,9 @@
       <div class="cards">
         <div class="card mb-3">
           <div class="card-body">
-            <div class="card-title"><p><i class="fas fa-tint" style="color:#00add6;"></i> HUMIDITY CHART</p></div>
+            <div class="card-title">
+              <p><i class="fas fa-tint" style="color:#00add6;"></i> HUMIDITY CHART</p>
+            </div>
             <div id="chart-humidity" class="chart-container"></div>
           </div>
         </div>
@@ -340,16 +344,19 @@
     </p>
     <!--Modal to delete data-->
     <div id="delete-modal" class="modal" sytle="display:none">
-      <span onclick="document.getElementById('delete-modal').style.display='none'" class="close" title="Close Modal">×</span>
+      <span onclick="document.getElementById('delete-modal').style.display='none'" class="close"
+        title="Close Modal">×</span>
       <form id="delete-data-form" class="modal-content" action="/">
         <div class="container">
           <h1>Delete Data</h1>
           <p>Are you sure you want to delete all data from database?</p>
           <div class="clearfix">
-            <button type="button" onclick="document.getElementById('delete-modal').style.display='none'" class="btn btn-warning">
+            <button type="button" onclick="document.getElementById('delete-modal').style.display='none'"
+              class="btn btn-warning">
               Cancel
             </button>
-            <button type="submit" onclick="document.getElementById('delete-modal').style.display='none'" class="btn btn-danger">
+            <button type="submit" onclick="document.getElementById('delete-modal').style.display='none'"
+              class="btn btn-danger">
               Delete
             </button>
           </div>
@@ -361,7 +368,7 @@
     <div class="cards">
       <div class="" id="table-container" style="display: none">
 
-        <table id="readings-table"  class="table align-middle mb-0 bg-white table-hover mb-3">
+        <table id="readings-table" class="table align-middle mb-0 bg-white table-hover mb-3">
           <tr id="theader">
             <th>Timestamp</th>
             <th>Temp (ºC)</th>
