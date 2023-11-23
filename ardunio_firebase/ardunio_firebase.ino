@@ -10,13 +10,13 @@
 #include <Adafruit_BME280.h>
 
 //======================================== Defines the pin and type of DHT sensor and initializes the DHT sensor.
-#define DHTPIN 2
+#define DHTPIN 5
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
 //========================================
 
 // Defines the Digital Pin of the "On Board LED".
-#define On_Board_LED 2
+// #define On_Board_LED 2
 
 // Defines the Digital Pin of the LED.
 #define LED_01_PIN 13
@@ -28,8 +28,8 @@ DHT dht(DHTPIN, DHTTYPE);
 #include "addons/RTDBHelper.h"
 
 // Insert your network credentials
-#define WIFI_SSID "PhamTungDuong"
-#define WIFI_PASSWORD "0969613858"
+#define WIFI_SSID "iPhone 12"
+#define WIFI_PASSWORD "12345678"
 
 // Insert Firebase project API Key
 #define API_KEY "AIzaSyCAx3QAAZCVzX4Swg7TluMLsZEgbNpSUb0"
