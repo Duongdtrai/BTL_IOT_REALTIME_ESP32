@@ -159,7 +159,7 @@ void loop() {
   float temperatureDHT22 = dht.readTemperature();
   // float humidityDHT22 = dht.readHumidity();
   // Kiểm tra nếu giá trị nhiệt độ hợp lý (không bằng NaN)
- if (!isnan(temperatureDHT22) ) {
+  if (!isnan(temperatureDHT22) ) {
     // In giá trị nhiệt độ và độ ẩm ra Serial Monitor
     Serial.print("Temperature from DHT22: ");
     Serial.println(temperatureDHT22);
@@ -187,7 +187,7 @@ void loop() {
     // json.set(presPath.c_str(), String(bme.readPressure()/100.0F));
 
 
-    json.set(tempPath.c_str(), String(temperatureDHT22));
+    json.set(tempPath.c_str(), String(random(1, 101)));
     json.set(humPath.c_str(), String(random(1, 101)));
     json.set(presPath.c_str(), String(random(1, 101)));
 

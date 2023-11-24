@@ -32,6 +32,17 @@
     // Make auth and database references
     const auth = firebase.auth();
     const db = firebase.database();
+
+
+    // tutorial send firebase data
+    function sendFirebaseData(e) {
+      const firebaseRef = db.ref("/your_data_node");
+      firebaseRef.push({
+        value: 0,
+        timestamp: "1700592019"
+      });
+      console.log("Duong123")
+    }
   </script>
 
   <!-- include highchartsjs to build the charts-->
@@ -209,6 +220,7 @@
 
   <!--CONTENT (SENSOR READINGS)-->
   <div class="content-sign-in container-sm my-4" id="content-sign-in" style="display: none">
+    <button onclick="sendFirebaseData()">Send firebase</button>
     <!--LAST UPDATE-->
     <p>
       <span class="date-time">Last update: <span id="lastUpdate"></span></span>
@@ -340,7 +352,8 @@
       <!--Hide data button-->
       <button id="hide-data-button" class="btn btn-info" style="display: none">Hide data</button>
       <!--Delete data button-->
-      <button id="delete-button" class="btn btn-danger" data-mdb-toggle="modal" data-mdb-target="#delete-modal">Delete data</button>
+      <button id="delete-button" class="btn btn-danger" data-mdb-toggle="modal" data-mdb-target="#delete-modal">Delete
+        data</button>
     </p>
     <!--Modal to delete data-->
     <!-- <div id="delete-modal" class="modal" sytle="display:none">
