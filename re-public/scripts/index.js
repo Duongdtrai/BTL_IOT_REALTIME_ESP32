@@ -106,6 +106,7 @@ const setupUI = (user) => {
             dbRef.orderByKey().limitToLast(chartRange).on('child_added', snapshot => {
                 var jsonData = snapshot.toJSON(); // example: {temperature: 25.02, humidity: 50.20, pressure: 1008.48, timestamp:1641317355}
                 // Save values on variables
+                console.log(jsonData)
                 var temperature = jsonData.temperature;
                 var humidity = jsonData.humidity;
                 var pressure = jsonData.pressure;
