@@ -5,6 +5,8 @@ import cv2
 import firebase_admin
 import mediapipe as mp
 from firebase_admin import credentials, db
+from threading import Event
+
 
 # Replace with your Firebase credentials JSON file path
 cred = credentials.Certificate(
@@ -21,11 +23,13 @@ firebase_admin.initialize_app(
 firebase_ref = db.reference("/your_data_node")
 
 # Global variables
-red_led = "0"
-green_led = "0"
-fan = "0"
-str_value = ""
+fan = 0
 check = 0
+exit = Event()
+
+# Function to get data to Firebase
+def get_data_from_firebase():
+    print("test")
 
 
 # Function to send data to Firebase
@@ -46,8 +50,8 @@ def send_data_to_firebase(value_to_send):
 def send_data_in_thread(value_to_send):
     def send_data():
         try:
-            # Simulate data processing (replace this with your actual logic)
-            time.sleep(0.5)
+            # Simulate data processing
+            exit.wait(0.5)
 
             # Send data to Firebase
             send_data_to_firebase(value_to_send)
@@ -61,17 +65,17 @@ def send_data_in_thread(value_to_send):
 
 
 # Function to convert decimal to binary
-def decimal_to_binary(decimal_number):
-    binary_number = bin(decimal_number)[2:]  # Skip the '0b' prefix
-    binary_number = binary_number.rjust(10, "0")
-    return binary_number
+# def decimal_to_binary(decimal_number):
+#     binary_number = bin(decimal_number)[2:]  # Skip the '0b' prefix
+#     binary_number = binary_number.rjust(10, "0")
+#     return binary_number
 
 
 # Function to convert binary to decimal
-def binary_to_decimal(binary_number):
-    # decimal_number = int(binary_number, 2)
-    # return decimal_number
-    return 1
+# def binary_to_decimal(binary_number):
+#     # decimal_number = int(binary_number, 2)
+#     # return decimal_number
+#     return 1
 
 
 # Khởi tạo đối tượng Mediapipe Hands
@@ -80,40 +84,36 @@ hands = mp_hands.Hands()
 
 
 # Main function to process data
-def process_data():
-    global red_led, green_led, fan, str_value, check
+# def process_data():
+#     global red_led, green_led, fan, str_value, check
 
-    for i in range(5):
-        # Simulate getting data (replace this with your actual data retrieval logic)
-        a = 123  # Replace this with your data retrieval logic
+#     for i in range(5):
+#         # Simulate getting data (replace this with your actual data retrieval logic)
+#         a = 123  # Replace this with your data retrieval logic
 
-        # Convert to binary
-        str_value = decimal_to_binary(a)
+#         # Convert to binary
+#         str_value = decimal_to_binary(a)
 
-        # Store old value
-        temp = str_value
+#         # Store old value
+#         temp = str_value
 
-        # Assign values to global variables
-        red_led = str_value[7]
-        green_led = str_value[9]
-        fan = str_value[5]
-        check = 0
+#         # Assign values to global variables
+#         red_led = str_value[7]
+#         green_led = str_value[9]
+#         fan = str_value[5]
+#         check = 0
 
-        # Create delay or perform other processing if needed
-        time.sleep(0.1)
+#         # Create delay or perform other processing if needed
+#         time.sleep(0.1)
 
 
 # Main loop
 # Mở camera
 cap = cv2.VideoCapture(0)
 print(4)
-a = int(1)
-str = decimal_to_binary(a)
-red_led = str[7]
-green_led = str[9]
-fan = str[5]
+fan = 0
 check = 0
-temp = ""
+
 while cap.isOpened():
     ret, frame = cap.read()
 
@@ -164,47 +164,43 @@ while cap.isOpened():
                 # Nếu ngón út cao, có thể là "BAO"
                 if pinky_tip.y < pinky_pip.y:
                     print("Giấy")
-                    if red_led == "0":
-                        red_led = "1"
+                    if fan == 0:
+                        fan = 1
                         check = 1
                 # Nếu không thì là "Kéo" hoặc "Dùi"
-                else:
-                    if middle_tip.y < middle_pip.y:
-                        print("Kéo")
-                        if fan == "0":
-                            fan = "1"
-                            check = 1
-                    else:
-                        print("Dùi")
-                        if green_led == "0":
-                            green_led = "1"
-                            check = 1
+                elif middle_tip.y < middle_pip.y:
+                    print("Kéo")
+                    if fan == 1:
+                        fan = 0
+                        check = 1
+                
+
             # Ngược lại, có thể là biểu hiện của "BÚA"
-            else:
-                print("Búa")
-                if red_led == "1" or green_led == "1":
-                    red_led = "0"
-                    green_led = "0"
-                    fan = "0"
-                    check = 1
+            # else:
+            #     print("Búa")
+            #     fan = 0
+            #     check = 0
 
     if check:
         # str_value = (
         #     str_value[:5] + fan + str_value[6] + red_led + str_value[8] + green_led
         # )
-        data = binary_to_decimal("abc")
+        print("fan: ", fan)
+        print("check: ", check)
 
         # Send data to Firebase in a separate thread
-        send_data_in_thread(data)
+        send_data_in_thread(fan)
+        check = 0
 
         # Process data as needed
-        process_data()
+        # process_data()
 
     # Hiển thị hình ảnh với landmarks và kết quả phân loại
     cv2.imshow("Hand Tracking", frame)
 
     # Nhấn 'q' để thoát
     if cv2.waitKey(1) & 0xFF == ord("q"):
+        exit.set()
         break
 
 # Giải phóng tài nguyên
