@@ -111,6 +111,7 @@ fan = str[5]
 check = 0
 temp = ""
 while cap.isOpened():
+    process_ubidots_data()
     ret, frame = cap.read()
 
     # Đảo ngược hình ảnh để hiển thị đúng hướng
@@ -189,7 +190,7 @@ while cap.isOpened():
         data = binary_to_decimal(str)
 
         send_ubidots_data_in_thread(data)
-        process_ubidots_data()
+       
         print(a)
         print(temp)
         print(data)

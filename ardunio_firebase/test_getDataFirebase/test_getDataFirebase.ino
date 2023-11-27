@@ -5,7 +5,6 @@
 #include <Adafruit_BME280.h>
 //Provide the token generation process info.
 #include "addons/TokenHelper.h"
-
 //Provide the RTDB payload printing info and other helper functions.
 #include "addons/RTDBHelper.h"
 // Thông tin kết nối WiFi
@@ -17,7 +16,6 @@
 #define USER_EMAIL "d@gmail.com"
 #define USER_PASSWORD "123456"
 #define DATABASE_URL "https://esp32-temperature-real-time-default-rtdb.asia-southeast1.firebasedatabase.app/"
-
 // Định nghĩa đối tượng BME280
 Adafruit_BME280 bme;  // I2C
 float temperature;
@@ -107,6 +105,14 @@ void fetchDataFromFirebase() {
 }
 
 void processFirebaseData(String payload) {
+   // Parse chuỗi JSON
+  // DynamicJsonDocument doc(1024);
+  // deserializeJson(doc, jsonString);
+
+  // // Trích xuất dữ liệu từ JSON
+  // const char *dataValue = doc["your-json-field"];
+  // Serial.print("Data value from Firebase: ");
+  // Serial.println(dataValue);
   // Xử lý dữ liệu JSON nhận được từ Firebase
   FirebaseJson receivedJson;
   receivedJson.setJsonData(payload);
@@ -115,6 +121,7 @@ void processFirebaseData(String payload) {
   // int receivedValue = receivedJson.get("value");
 
   // Hiển thị giá trị nhận được từ Firebase
+  // Serial.print(receivedJson.get("value"));
   Serial.print("Received value from Firebase: ");
   // Serial.println(receivedValue);
 

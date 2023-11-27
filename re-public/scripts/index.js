@@ -169,6 +169,8 @@ const setupUI = (user) => {
 
         // GAUGES
         // Get the latest readings and display on gauges
+
+
         dbRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
             var jsonData = snapshot.toJSON(); // example: {temperature: 25.02, humidity: 50.20, pressure: 1008.48, timestamp:1641317355}
             var temperature = jsonData.temperature;
@@ -291,6 +293,9 @@ const setupUI = (user) => {
             hideDataButtonElement.style.display = 'none';
         });
 
+        getDataFan(firebase)
+
+        handleSwitchCheckCam(firebase)
         // IF USER IS LOGGED OUT
     } else {
         // toggle UI elements
@@ -305,4 +310,27 @@ const setupUI = (user) => {
         document.getElementById('logout-link').style.display = 'none'
         document.getElementById('login-link-group').style.display = 'block'
     }
+}
+
+
+
+function getDataFan(firebase) {
+    let switchCheckbox = document.getElementById('switch_fan');
+    let dbPath = 'your_data_node'
+    let dbRef = firebase.database().ref(dbPath);
+    dbRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
+        let jsonData = snapshot.toJSON();
+        switchCheckbox.checked = jsonData.value
+    });
+}
+
+
+function handleSwitchCheckCam(firebase) {
+    let switchCheckbox = document.getElementById('switch_camera');
+    let dbPath = 'check_cam'
+    let dbRef = firebase.database().ref(dbPath);
+    dbRef.orderByKey().limitToLast(1).on('child_added', snapshot => {
+        let jsonData = snapshot.toJSON();
+        switchCheckbox.checked = jsonData.value
+    });
 }

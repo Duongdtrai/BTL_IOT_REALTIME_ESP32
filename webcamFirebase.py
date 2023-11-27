@@ -1,12 +1,11 @@
 import threading
 import time
+from threading import Event
 
 import cv2
 import firebase_admin
 import mediapipe as mp
 from firebase_admin import credentials, db
-from threading import Event
-
 
 # Replace with your Firebase credentials JSON file path
 cred = credentials.Certificate(
@@ -20,22 +19,31 @@ firebase_admin.initialize_app(
 )
 
 # Replace with your Firebase Realtime Database reference
-firebase_ref = db.reference("/your_data_node")
+firebase_ref_data_node = db.reference("/your_data_node")
+firebase_ref_check_cam = db.reference("/check_cam")
 
 # Global variables
 fan = 0
 check = 0
 exit = Event()
 
+
 # Function to get data to Firebase
 def get_data_from_firebase():
-    print("test")
+    query = firebase_ref_check_cam.order_by_key().limit_to_last(1)
+    # Retrieve the data
+    results = query.get()
+
+    # Extract the data from the query result
+    for key, value in results.items():
+        print("checkcam: ", value.get("value"))
+        return int(value.get("value"))
 
 
 # Function to send data to Firebase
 def send_data_to_firebase(value_to_send):
     try:
-        firebase_ref.push(
+        firebase_ref_data_node.push(
             {
                 "value": value_to_send,
                 "timestamp": int(time.time()),  # Add a timestamp if needed
@@ -51,7 +59,7 @@ def send_data_in_thread(value_to_send):
     def send_data():
         try:
             # Simulate data processing
-            exit.wait(0.5)
+            exit.wait(1)
 
             # Send data to Firebase
             send_data_to_firebase(value_to_send)
@@ -113,7 +121,9 @@ cap = cv2.VideoCapture(0)
 print(4)
 fan = 0
 check = 0
+checkOnOff = get_data_from_firebase()
 
+# bật
 while cap.isOpened():
     ret, frame = cap.read()
 
@@ -173,7 +183,6 @@ while cap.isOpened():
                     if fan == 1:
                         fan = 0
                         check = 1
-                
 
             # Ngược lại, có thể là biểu hiện của "BÚA"
             # else:
@@ -181,7 +190,7 @@ while cap.isOpened():
             #     fan = 0
             #     check = 0
 
-    if check:
+    if check and checkOnOff:
         # str_value = (
         #     str_value[:5] + fan + str_value[6] + red_led + str_value[8] + green_led
         # )
@@ -202,6 +211,7 @@ while cap.isOpened():
     if cv2.waitKey(1) & 0xFF == ord("q"):
         exit.set()
         break
+    checkOnOff = get_data_from_firebase()
 
 # Giải phóng tài nguyên
 hands.close()

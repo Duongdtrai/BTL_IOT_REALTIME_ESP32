@@ -43,6 +43,27 @@
       });
       console.log("Duong123")
     }
+
+    function changeSwitchCamera() {
+      let switchCheckbox = document.getElementById('switch_camera');
+      let switchValue = switchCheckbox.checked;
+      const firebaseRef = db.ref("/check_cam");
+      firebaseRef.push({
+        value: Number(switchValue),
+        timestamp: new Date().getTime()
+      });
+      console.log('Switch value:', Number(firebaseRef));
+    }
+
+    function changeSwitchFan() {
+      var switchCheckbox = document.getElementById('switch_fan');
+      let switchValue = switchCheckbox.checked;
+      const firebaseRef = db.ref("/your_data_node");
+      firebaseRef.push({
+        value: Number(switchValue),
+        timestamp: new Date().getTime()
+      });
+    }
   </script>
 
   <!-- include highchartsjs to build the charts-->
@@ -221,6 +242,19 @@
   <!--CONTENT (SENSOR READINGS)-->
   <div class="content-sign-in container-sm my-4" id="content-sign-in" style="display: none">
     <button onclick="sendFirebaseData()">Send firebase</button>
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="switch_camera"
+        onchange="changeSwitchCamera();" />
+      <label class="form-check-label" for="flexSwitchCheckDefault">Use camera</label>
+    </div>
+
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" role="switch" id="switch_fan" onchange="changeSwitchFan();" />
+      <label class="form-check-label" for="flexSwitchCheckDefault">Turn on/off quạt</label>
+    </div>
+
+
     <!--LAST UPDATE-->
     <p>
       <span class="date-time">Last update: <span id="lastUpdate"></span></span>
