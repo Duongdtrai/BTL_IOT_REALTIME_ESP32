@@ -163,12 +163,10 @@ void loop() {
   if (temperatureDHT22 >= 35) {
     sendDataToFirebase(1);
     digitalWrite(FAN_PIN, HIGH);
+  } else if (checkFan == 1) {
+    digitalWrite(FAN_PIN, HIGH);
   } else {
-    if (checkFan == 1) {
-      digitalWrite(FAN_PIN, HIGH);
-    } else {
-      digitalWrite(FAN_PIN, LOW);
-    }
+    digitalWrite(FAN_PIN, LOW);
   }
 
   // Send new readings to database
