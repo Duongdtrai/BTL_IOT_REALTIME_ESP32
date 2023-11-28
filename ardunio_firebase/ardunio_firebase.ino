@@ -8,8 +8,11 @@
 #include <Firebase_ESP_Client.h>
 #include "DHT.h"
 #include <Adafruit_BME280.h>
-
+#include <HTTPClient.h>
+#include "ArduinoJson.h"
 //======================================== Defines the pin and type of DHT sensor and initializes the DHT sensor.
+
+
 #define DHTPIN 5
 #define DHTTYPE DHT22
 DHT dht(DHTPIN, DHTTYPE);
@@ -20,7 +23,7 @@ DHT dht(DHTPIN, DHTTYPE);
 
 // Defines the Digital Pin of the LED.
 #define LED_01_PIN 13
-
+#define FAN_PIN 21
 //Provide the token generation process info.
 #include "addons/TokenHelper.h"
 
@@ -28,8 +31,8 @@ DHT dht(DHTPIN, DHTTYPE);
 #include "addons/RTDBHelper.h"
 
 // Insert your network credentials
-#define WIFI_SSID "iPhone 12"
-#define WIFI_PASSWORD "12345678"
+#define WIFI_SSID "PhamTungDuong"
+#define WIFI_PASSWORD "0969613858"
 
 // Insert Firebase project API Key
 #define API_KEY "AIzaSyCAx3QAAZCVzX4Swg7TluMLsZEgbNpSUb0"
@@ -63,6 +66,7 @@ String parentPath;
 int timestamp;
 FirebaseJson json;
 
+int checkFan = 0;
 const char* ntpServer = "pool.ntp.org";
 
 // BME280 sensor
@@ -73,7 +77,7 @@ float pressure;
 
 // Timer variables (send new readings every three minutes)
 unsigned long sendDataPrevMillis = 0;
-unsigned long timerDelay = 180000;
+unsigned long timerDelay = 3000;
 
 // Initialize BME280
 void initBME() {
@@ -109,36 +113,25 @@ unsigned long getTime() {
 }
 
 void setup() {
-
   Serial.begin(115200);
-  Serial.println("Duong");
-  // Initialize BME280 sensor
-  // initBME();
+  pinMode(FAN_PIN, OUTPUT);
   initWiFi();
   configTime(0, 0, ntpServer);
-
   // Assign the api key (required)
   config.api_key = API_KEY;
-
   // Assign the user sign in credentials
   auth.user.email = USER_EMAIL;
   auth.user.password = USER_PASSWORD;
-
   // Assign the RTDB URL (required)
   config.database_url = DATABASE_URL;
-
   Firebase.reconnectWiFi(true);
   fbdo.setResponseSize(4096);
-
   // Assign the callback function for the long running token generation task */
   config.token_status_callback = tokenStatusCallback;  //see addons/TokenHelper.h
-
   // Assign the maximum retry of token generation
   config.max_token_generation_retry = 5;
-
   // Initialize the library with the Firebase authen and config
   Firebase.begin(&config, &auth);
-
   // Getting the user UID might take a few seconds
   Serial.println("Getting User UID");
   while ((auth.token.uid) == "") {
@@ -147,52 +140,107 @@ void setup() {
   }
   // Print user UID
   uid = auth.token.uid.c_str();
-  Serial.print("User UID: ");
-  Serial.println(uid);
-
   // Update database path
   databasePath = "/UsersData/" + uid + "/readings";
   dht.begin();
 }
 
 void loop() {
+  fetchDataFromFirebase();
   float temperatureDHT22 = dht.readTemperature();
-  // float humidityDHT22 = dht.readHumidity();
-  // Kiểm tra nếu giá trị nhiệt độ hợp lý (không bằng NaN)
+  float readHumidityDHT22 = dht.readHumidity();
   if (!isnan(temperatureDHT22) ) {
     // In giá trị nhiệt độ và độ ẩm ra Serial Monitor
     Serial.print("Temperature from DHT22: ");
     Serial.println(temperatureDHT22);
-    // Serial.print("Humidity from DHT22: ");
-    // Serial.println(humidityDHT22);
-
-    // Các thao tác khác có thể được thực hiện ở đây, ví dụ: gửi nhiệt độ và độ ẩm đọc được đến Firebase.
+    Serial.print("Humidity from DHT22: ");
+    Serial.println(readHumidityDHT22);
   } else {
     Serial.println("Failed to read temperature or humidity from DHT22");
+  }
+
+  // turn on/off FAN
+  if (temperatureDHT22 >= 35) {
+    sendDataToFirebase(1);
+    digitalWrite(FAN_PIN, HIGH);
+  } else {
+    if (checkFan == 1) {
+      digitalWrite(FAN_PIN, HIGH);
+    } else {
+      digitalWrite(FAN_PIN, LOW);
+    }
   }
 
   // Send new readings to database
   if (Firebase.ready() && (millis() - sendDataPrevMillis > timerDelay || sendDataPrevMillis == 0)) {
     sendDataPrevMillis = millis();
-
     //Get current timestamp
     timestamp = getTime();
-    Serial.print("time: ");
-    Serial.println(timestamp);
-
     parentPath = databasePath + "/" + String(timestamp);
-
-    // json.set(tempPath.c_str(), String(bme.readTemperature()));
-    // json.set(humPath.c_str(), String(bme.readHumidity()));
-    // json.set(presPath.c_str(), String(bme.readPressure()/100.0F));
-
-
-    json.set(tempPath.c_str(), String(random(1, 101)));
-    json.set(humPath.c_str(), String(random(1, 101)));
+    json.set(tempPath.c_str(), String(temperatureDHT22));
+    json.set(humPath.c_str(), String(readHumidityDHT22));
     json.set(presPath.c_str(), String(random(1, 101)));
-
-
     json.set(timePath, String(timestamp));
     Serial.printf("Set json... %s\n", Firebase.RTDB.setJSON(&fbdo, parentPath.c_str(), &json) ? "ok" : fbdo.errorReason().c_str());
   }
+}
+
+
+
+
+void fetchDataFromFirebase() {
+  HTTPClient http;
+  String url =  String(DATABASE_URL) + "/your_data_node.json"; // Thay đổi thành đường dẫn của bạn
+  http.begin(url);
+  int httpResponseCode = http.GET();
+  if (httpResponseCode > 0) {
+    String payload = http.getString();
+    processFirebaseData(payload);
+  } else {
+    Serial.print("Error on HTTP request. Response code: ");
+  }
+  http.end();
+}
+
+
+void processFirebaseData(String payload) {
+  char a = payload[payload.length()-3];
+  if (a == '1') {
+    checkFan = 1;
+  } else {
+    checkFan = 0;
+  } 
+}
+
+void sendDataToFirebase(int value_to_send) {
+  HTTPClient http;
+
+  // Địa chỉ của Firebase Realtime Database
+  String url = String(DATABASE_URL) + "/your_data_node.json";
+
+  // Tạo đối tượng JSON sử dụng thư viện ArduinoJson
+  StaticJsonDocument<200> jsonDocument;
+  jsonDocument["value"] = value_to_send;
+  jsonDocument["timestamp"] = int(time(nullptr));  // Lấy timestamp hiện tại
+
+  // Chuyển đối tượng JSON thành chuỗi
+  String payload;
+  serializeJson(jsonDocument, payload);
+
+  // Bắt đầu kết nối và gửi dữ liệu
+  http.begin(url);
+  http.addHeader("Content-Type", "application/json");
+
+  int httpResponseCode = http.POST(payload);
+
+  if (httpResponseCode > 0) {
+    Serial.print("Successfully sent data. Response code: ");
+    Serial.println(httpResponseCode);
+  } else {
+    Serial.print("Error on HTTP request. Response code: ");
+    Serial.println(httpResponseCode);
+  }
+
+  // Kết thúc kết nối
+  http.end();
 }

@@ -7,6 +7,8 @@
 #include "addons/TokenHelper.h"
 //Provide the RTDB payload printing info and other helper functions.
 #include "addons/RTDBHelper.h"
+
+#include "ArduinoJson.h"
 // Thông tin kết nối WiFi
 #define WIFI_SSID "PhamTungDuong"
 #define WIFI_PASSWORD "0969613858"
@@ -104,26 +106,64 @@ void fetchDataFromFirebase() {
   http.end();
 }
 
+
 void processFirebaseData(String payload) {
-   // Parse chuỗi JSON
-  // DynamicJsonDocument doc(1024);
-  // deserializeJson(doc, jsonString);
+  char a = payload[payload.length()-3];
+  Serial.println(a);
+  // Kích thước đủ lớn để chứa JSON
+  const size_t capacity = JSON_OBJECT_SIZE(2) + 30;
+  DynamicJsonDocument doc(capacity);
 
-  // // Trích xuất dữ liệu từ JSON
-  // const char *dataValue = doc["your-json-field"];
-  // Serial.print("Data value from Firebase: ");
-  // Serial.println(dataValue);
-  // Xử lý dữ liệu JSON nhận được từ Firebase
-  FirebaseJson receivedJson;
-  receivedJson.setJsonData(payload);
+  // Deserialize JSON
+  deserializeJson(doc, payload);
 
-  // Trích xuất giá trị từ JSON
-  // int receivedValue = receivedJson.get("value");
+  // Hiển thị JSON object đầy đủ trên Serial Monitor
+  Serial.println("Full JSON Object:");
+  serializeJson(doc, Serial);
+  Serial.println();
 
-  // Hiển thị giá trị nhận được từ Firebase
-  // Serial.print(receivedJson.get("value"));
-  Serial.print("Received value from Firebase: ");
-  // Serial.println(receivedValue);
+  // Kiểm tra nếu JSON là đối tượng
+  if (doc.is<JsonObject>()) {
+    // Lấy giá trị từ trường "value" của đối tượng cuối cùng
+    JsonObject lastObject = doc.as<JsonObject>();
+    
+    // Hiển thị tất cả các giá trị của đối tượng cuối cùng
+    Serial.println("Values from lastObject:");
 
-  // Có thể thực hiện các thao tác khác với giá trị nhận được ở đây
+    for (JsonPair kv : lastObject) {
+      const char *key = kv.key().c_str();
+      int value = kv.value()["value"];
+      
+      Serial.print("Key: ");
+      Serial.print(key);
+      Serial.print(", Value: ");
+      Serial.println(value);
+    }
+  } else {
+    Serial.println("Invalid JSON format. Expected an object.");
+  }
 }
+
+// void processFirebaseData(String payload) {
+//    // Parse chuỗi JSON
+//   // DynamicJsonDocument doc(1024);
+//   // deserializeJson(doc, jsonString);
+
+//   // // Trích xuất dữ liệu từ JSON
+//   // const char *dataValue = doc["your-json-field"];
+//   // Serial.print("Data value from Firebase: ");
+//   // Serial.println(dataValue);
+//   // Xử lý dữ liệu JSON nhận được từ Firebase
+//   FirebaseJson receivedJson;
+//   receivedJson.setJsonData(payload);
+
+//   // Trích xuất giá trị từ JSON
+//   // int receivedValue = receivedJson.get("value");
+
+//   // Hiển thị giá trị nhận được từ Firebase
+//   // Serial.print(receivedJson.get("value"));
+//   Serial.print("Received value from Firebase: ");
+//   // Serial.println(receivedValue);
+
+//   // Có thể thực hiện các thao tác khác với giá trị nhận được ở đây
+// }
