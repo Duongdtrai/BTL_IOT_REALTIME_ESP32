@@ -16,7 +16,7 @@ function createTemperatureChart() {
     },
     series: [
       {
-        name: 'BME280'
+        name: 'DHT22'
       }
     ],
     title: { 
@@ -54,7 +54,7 @@ function createHumidityChart(){
       type: 'spline'  
     },
     series: [{
-      name: 'BME280'
+      name: 'DHT22'
     }],
     title: { 
       text: undefined
@@ -94,7 +94,7 @@ function createPressureChart() {
       type: 'spline'  
     },
     series: [{
-      name: 'BME280'
+      name: 'DHT22'
     }],
     title: { 
       text: undefined
