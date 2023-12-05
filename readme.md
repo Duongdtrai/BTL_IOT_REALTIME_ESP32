@@ -1,19 +1,12 @@
 # Real-time Temperature and Humidity Data Logging Web App with ESP32 and Firebase
 
 ## Giới Thiệu Đề Tài
-Trong thế giới kết nối ngày nay, việc thu thập và truy cập dữ liệu nhiệt độ và độ ẩm theo thời gian thực là vô cùng quan trọng cho nhiều ứng dụng khác nhau. Dự án này đã được thúc đẩy bởi nhu cầu theo dõi môi trường, như theo dõi thời tiết, quản lý điều kiện trong nhà hoặc tự động hóa công nghiệp. Chúng tôi đã lấy cảm hứng từ sự cần thiết của việc thu thập dữ liệu môi trường trong thời gian thực và tạo ra một web app đơn giản liên quan đến việc thu thập và ghi lại dữ liệu về nhiệt độ và độ ẩm theo thời gian thực.
+Trong thế giới kết nối ngày nay, việc thu thập và truy cập dữ liệu nhiệt độ và độ ẩm theo thời gian thực là vô cùng quan trọng cho nhiều ứng dụng khác nhau. Dự án này đã được thúc đẩy bởi nhu cầu theo dõi môi trường, như theo dõi thời tiết, quản lý điều kiện trong nhà. Chúng tôi đã lấy cảm hứng từ đó tạo ra một web app đơn giản liên quan đến việc thu thập và ghi lại dữ liệu về nhiệt độ và độ ẩm theo thời gian thực rôi từ đó phát triển tính năng tư động bât quạt khi nhiệt độ đo đuợc vuợt quá 35 độ C, đồng thời cũng kết hợp bật/tắt quạt bằng nhận diện cử chỉ bàn tay.
 
 ## Ứng Dụng
-Dự án này có thể được áp dụng trong nhiều ứng dụng thực tế như:
-
-- **Bảo Quản Thực Phẩm**:
-Trong ngành thực phẩm, việc duy trì nhiệt độ và độ ẩm chính xác là quan trọng để đảm bảo thực phẩm không bị hỏng. Ứng dụng này có thể giúp theo dõi điều kiện lưu trữ thực phẩm và cảnh báo nếu có bất kỳ sự biến đổi nào.
 
 - **Tự Động Hóa Nhà Thông Minh**:
-Trong các hệ thống nhà thông minh, việc theo dõi nhiệt độ và độ ẩm có thể được sử dụng để điều khiển hệ thống làm mát, đèn và các thiết bị khác để tối ưu hóa sự thoải mái và tiết kiệm năng lượng.
-	
-- **Theo Dõi Thời Tiết Trong Nhà**:
-Dự án này có thể được sử dụng để theo dõi thời tiết trong nhà như hiển thị nhiệt độ và độ ẩm trong phòng. Điều này hữu ích cho việc quyết định liệu có cần bật máy lạnh hoặc máy sưởi trong các phòng riêng lẻ.
+Dự án này được sử dụng để theo dõi thời tiết trong nhà như hiển thị nhiệt độ và độ ẩm trong phòng. Điều này hữu ích cho việc quyết định liệu có cần bật máy lạnh hoặc máy sưởi trong các phòng riêng lẻ.
 Được sử dụng trong các nghiên cứu về khí hậu và môi trường.
 
 ## Dụng Cụ Cần Chuẩn Bị
@@ -21,11 +14,14 @@ Dự án này có thể được sử dụng để theo dõi thời tiết trong
 - **DHT22 Sensor:** Cảm biến này được sử dụng để đo nhiệt độ, độ ẩm.
 - **Đèn LED (Tùy Chọn):** Đèn LED có thể được sử dụng để hiển thị trạng thái hoạt động của thiết bị.
 - **Dây Cắm và Kết Nối Cần Thiết.**
+- **Quạt điện**
+- **Camera**
 
 ## Công Nghệ Sử Dụng
 - Firebase: Dùng làm hệ thống cơ sở dữ liệu dựa trên điện toán đám mây phổ biến để lưu trữ dữ liệu theo thời gian thực..
 - ESP32 và Arduino IDE: Được sử dụng để lập trình và điều khiển vi điều khiển ESP32.
 - Node.js và Firebase Tools: Sử dụng để cài đặt và quản lý dự án Firebase từ máy tính cục bộ.
+- Python: Sử dụng model nhận diện cử chỉ tay bật tắt quạt.
 
 ## Các Bước Thực Hiện
 1. **Tạo Dự Án và Ứng Dụng trên Firebase:**
