@@ -72,48 +72,9 @@ def send_data_in_thread(value_to_send):
     thread.start()
 
 
-# Function to convert decimal to binary
-# def decimal_to_binary(decimal_number):
-#     binary_number = bin(decimal_number)[2:]  # Skip the '0b' prefix
-#     binary_number = binary_number.rjust(10, "0")
-#     return binary_number
-
-
-# Function to convert binary to decimal
-# def binary_to_decimal(binary_number):
-#     # decimal_number = int(binary_number, 2)
-#     # return decimal_number
-#     return 1
-
-
 # Khởi tạo đối tượng Mediapipe Hands
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
-
-
-# Main function to process data
-# def process_data():
-#     global red_led, green_led, fan, str_value, check
-
-#     for i in range(5):
-#         # Simulate getting data (replace this with your actual data retrieval logic)
-#         a = 123  # Replace this with your data retrieval logic
-
-#         # Convert to binary
-#         str_value = decimal_to_binary(a)
-
-#         # Store old value
-#         temp = str_value
-
-#         # Assign values to global variables
-#         red_led = str_value[7]
-#         green_led = str_value[9]
-#         fan = str_value[5]
-#         check = 0
-
-#         # Create delay or perform other processing if needed
-#         time.sleep(0.1)
-
 
 # Main loop
 # Mở camera
@@ -184,16 +145,9 @@ while cap.isOpened():
                         fan = 0
                         check = 1
 
-            # Ngược lại, có thể là biểu hiện của "BÚA"
-            # else:
-            #     print("Búa")
-            #     fan = 0
-            #     check = 0
 
     if check and checkOnOff:
-        # str_value = (
-        #     str_value[:5] + fan + str_value[6] + red_led + str_value[8] + green_led
-        # )
+
         print("fan: ", fan)
         print("check: ", check)
 
@@ -201,8 +155,7 @@ while cap.isOpened():
         send_data_in_thread(fan)
         check = 0
 
-        # Process data as needed
-        # process_data()
+
 
     # Hiển thị hình ảnh với landmarks và kết quả phân loại
     cv2.imshow("Hand Tracking", frame)
