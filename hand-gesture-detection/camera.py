@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 
 # Load the trained model
-model = tf.keras.models.load_model("D:\hand_gesture_model.h5")
+model = tf.keras.models.load_model("hand_gesture_model.h5")
 
 
 # Function to preprocess the image for the model

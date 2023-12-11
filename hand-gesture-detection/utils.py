@@ -5,7 +5,7 @@ import cv2  # Thư viện OpenCV
 import matplotlib.pyplot as plt
 import numpy as np
 
-data_dir = "datasets"  # Thư mục chứa các thư mục con cho từng loại hoa
+data_dir = "hand-gesture-detection/datasets"  # Thư mục chứa các thư mục con cho từng loại hoa
 
 # Danh sách các loại hoa
 categories = [
@@ -30,7 +30,7 @@ def make_data():
             )  # Đường dẫn đầy đủ đến hình ảnh hiện tại
             image = cv2.imread(image_path)  # Đọc hình ảnh bằng thư viện OpenCV
 
-            cv2.imshow("image sdf sđf", image)  # Hiển thị hình ảnh (để kiểm tra lỗi)
+            # cv2.imshow("image sdf sđf", image)  # Hiển thị hình ảnh (để kiểm tra lỗi)
 
             # In thông tin về hình ảnh hiện tại
             print("image_path: ", image_path)

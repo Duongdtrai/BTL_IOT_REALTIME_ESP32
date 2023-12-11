@@ -12,7 +12,6 @@ from utils import load_data  # import hàm load_data từ file utils
 # Phân chia dữ liệu thành tập huấn luyện và tập kiểm tra (90% huấn luyện, 10% kiểm tra)
 x_train, x_test, y_train, y_test = train_test_split(feature, labels, test_size=0.1)
 
-# Danh sách các loại hoa trong dữ liệu
 categories = [
     "hai",
     "nam",
@@ -58,7 +57,7 @@ model.compile(
     optimizer="adam", loss="sparse_categorical_crossentropy", metrics=["accuracy"]
 )
 
-# Huấn luyện mô hình trên dữ liệu huấn luyện (x_train, y_train) với batch size là 100 và 10 epochs
+# Huấn luyện mô hình trên dữ liệu huấn luyện (x_train, y_train) với batch size là 100 và 150 epochs
 model.fit(x_train, y_train, batch_size=100, epochs=150)
 
 # Lưu mô hình đã huấn luyện vào tệp "mymodel.h5"

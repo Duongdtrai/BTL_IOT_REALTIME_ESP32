@@ -67,6 +67,7 @@ node_modules/
 
 
 datasets
-
+data.pickle
+__pycache__/
 
 hand_gesture_model.h5
