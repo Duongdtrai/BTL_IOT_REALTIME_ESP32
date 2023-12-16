@@ -5,9 +5,9 @@ import cv2  # Thư viện OpenCV
 import matplotlib.pyplot as plt
 import numpy as np
 
-data_dir = "hand-gesture-detection/datasets"  # Thư mục chứa các thư mục con cho từng loại hoa
+data_dir = "hand-gesture-detection/datasets"  # Thư mục chứa các thư mục con cho từng số
 
-# Danh sách các loại hoa
+# Danh sách các số
 categories = [
     "hai",
     "nam",
@@ -20,10 +20,10 @@ def make_data():
     for category in categories:
         path = os.path.join(
             data_dir, category
-        )  # Đường dẫn đến thư mục của mỗi loại hoa
-        label = categories.index(category)  # Gán một nhãn duy nhất cho mỗi loại hoa
+        )  # Đường dẫn đến thư mục của mỗi số
+        label = categories.index(category)  # Gán một nhãn duy nhất cho mỗi số
 
-        # Duyệt qua các hình ảnh trong loại hoa hiện tại
+        # Duyệt qua các hình ảnh trong số hiện tại
         for img_name in os.listdir(path):
             image_path = os.path.join(
                 path, img_name
@@ -57,7 +57,7 @@ def make_data():
 
         print(len(data))
 
-        # Lưu danh sách dữ liệu vào một tệp pickle sau khi xử lý mỗi loại hoa
+        # Lưu danh sách dữ liệu vào một tệp pickle sau khi xử lý mỗi số
         pik = open("data.pickle", "wb")
         pickle.dump(data, pik)
         pik.close
