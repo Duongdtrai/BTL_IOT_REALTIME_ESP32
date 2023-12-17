@@ -30,7 +30,7 @@ firebase_ref_data_node = db.reference("/your_data_node")
 firebase_ref_check_cam = db.reference("/check_cam")
 
 # Tải mô hình đã được đào tạo
-model = tf.keras.models.load_model("D:\hand_gesture_model.h5")
+model = tf.keras.models.load_model("hand_gesture_model.h5")
 
 
 # Hàm tiền xử lý ảnh cho mô hình
@@ -60,7 +60,7 @@ def get_data_from_firebase():
 
     # Trích xuất dữ liệu từ kết quả truy vấn
     for key, value in results.items():
-        print("checkcam: ", value.get("value"))
+        # print("checkcam: ", value.get("value"))
         return int(value.get("value"))
 
 
