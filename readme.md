@@ -48,7 +48,7 @@ Dự án này được sử dụng để theo dõi thời tiết trong nhà như
    - Đảm bảo rằng hệ thống hoạt động ổn định và kiểm tra định kỳ dữ liệu để đảm bảo tính chính xác.
 
 
-## CácH CHẠY PROJECT
+## cách CHẠY PROJECT
    - Chạy file “model.ipynb” trong folder hand-gesture-detection để có được kết quả train
    - Chạy ứng dụng web bằng file “index.html” trong folder re-public
    - Chạy app camera bởi file “camera.py” trong folder  hand-gesture-detection
