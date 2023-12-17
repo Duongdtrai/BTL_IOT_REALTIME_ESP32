@@ -1,82 +1,164 @@
+import threading
+import time
+from threading import Event
+
 import cv2
+import firebase_admin
 import mediapipe as mp
 import numpy as np
 import tensorflow as tf
+from firebase_admin import credentials, db
 
-# Load the trained model
-model = tf.keras.models.load_model("hand_gesture_model.h5")
+# Thay đổi đường dẫn của tệp tin Firebase credentials JSON theo đường dẫn của bạn
+cred = credentials.Certificate(
+    "./esp32-temperature-real-time-firebase-adminsdk-4qupr-6012ccbb38.json"
+)
+firebase_admin.initialize_app(
+    cred,
+    {
+        "databaseURL": "https://esp32-temperature-real-time-default-rtdb.asia-southeast1.firebasedatabase.app"
+    },
+)
+
+# Biến toàn cục
+fan = 0
+check = 0
+exit = Event()
+
+# Thay đổi đường dẫn của Firebase Realtime Database reference theo đường dẫn của bạn
+firebase_ref_data_node = db.reference("/your_data_node")
+firebase_ref_check_cam = db.reference("/check_cam")
+
+# Tải mô hình đã được đào tạo
+model = tf.keras.models.load_model("D:\hand_gesture_model.h5")
 
 
-# Function to preprocess the image for the model
+# Hàm tiền xử lý ảnh cho mô hình
 def preprocess_image(frame):
-    # Resize the frame to match the input size of the model
+    # Resize frame để khớp với kích thước đầu vào của mô hình
     resized_frame = cv2.resize(frame, (224, 224))
-
-    # Normalize pixel values to be between 0 and 1
+    # Chuẩn hóa giá trị pixel để nằm trong khoảng từ 0 đến 1
     normalized_frame = resized_frame / 255.0
 
-    # Expand dimensions to create a batch (required by the model)
+    # Mở rộng chiều để tạo một batch (yêu cầu bởi mô hình)
     input_data = np.expand_dims(normalized_frame, axis=0)
 
     return input_data
 
 
-# Function to handle the model prediction
+# Hàm xử lý dự đoán của mô hình
 def handle_prediction(prediction):
     predicted_class = np.argmax(prediction)
-    if predicted_class == 0:
-        print("Hai gesture detected.")
-    elif predicted_class == 1:
-        print("Nam gesture detected.")
-    # Add more cases for other gestures as needed
+    return 0 if predicted_class == 0 else 1
 
 
-# Initialize MediaPipe Hands
+# Hàm để nhận dữ liệu từ Firebase
+def get_data_from_firebase():
+    query = firebase_ref_check_cam.order_by_key().limit_to_last(1)
+    # Truy xuất dữ liệu
+    results = query.get()
+
+    # Trích xuất dữ liệu từ kết quả truy vấn
+    for key, value in results.items():
+        print("checkcam: ", value.get("value"))
+        return int(value.get("value"))
+
+
+# Hàm để gửi dữ liệu đến Firebase
+def send_data_to_firebase(value_to_send):
+    try:
+        firebase_ref_data_node.push(
+            {
+                "value": value_to_send,
+                "timestamp": int(time.time()),  # Thêm timestamp nếu cần
+            }
+        )
+        print("Dữ liệu đã được gửi đến Firebase thành công.")
+    except Exception as e:
+        print(f"Lỗi khi gửi dữ liệu đến Firebase: {e}")
+
+
+# Hàm để gửi dữ liệu trong một luồng riêng
+def send_data_in_thread(value_to_send):
+    def send_data():
+        try:
+            # Giả lập xử lý dữ liệu
+            exit.wait(1)
+
+            # Gửi dữ liệu đến Firebase
+            send_data_to_firebase(value_to_send)
+            print("Dữ liệu đã được gửi đến Firebase trong luồng")
+        except Exception as e:
+            print(f"Lỗi trong hàm send_data: {e}")
+
+    # Tạo một luồng mới và chạy send_data trong luồng đó
+    thread = threading.Thread(target=send_data)
+    thread.start()
+
+
+# Khởi tạo MediaPipe Hands
 mp_hands = mp.solutions.hands
 hands = mp_hands.Hands()
 
-# Open camera
+# Mở camera
 cap = cv2.VideoCapture(0)
+fan = 0
+check = 0
+checkOnOff = get_data_from_firebase()
 
 while cap.isOpened():
     ret, frame = cap.read()
 
-    # Flip the frame horizontally for a later selfie-view display
+    # Lật frame theo chiều ngang để hiển thị ở chế độ xem tự sướng sau này
     frame = cv2.flip(frame, 1)
 
-    # Convert the BGR image to RGB
+    # Chuyển đổi hình ảnh BGR sang RGB
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
-    # Process the frame with MediaPipe Hands
+    # Xử lý frame với MediaPipe Hands
     results = hands.process(rgb_frame)
 
     if results.multi_hand_landmarks:
-        # Perform hand gesture recognition for the first detected hand (assuming only one hand)
+        # Thực hiện nhận diện cử chỉ tay cho bàn tay đầu tiên được phát hiện (giả sử chỉ có một bàn tay)
         landmarks = results.multi_hand_landmarks[0].landmark
-        # Process the landmarks as needed for your gesture recognition model
+        # Xử lý các điểm đánh dấu cần thiết cho mô hình nhận diện cử chỉ tay của bạn
 
-        # Preprocess the frame for the model
+        # Tiền xử lý frame cho mô hình
         processed_frame = preprocess_image(frame)
 
-        # Make predictions using the loaded model
+        # Đưa ra dự đoán sử dụng mô hình đã tải
         prediction = model.predict(processed_frame)
 
-        # Handle the model prediction
-        handle_prediction(prediction)
+        # Xử lý dự đoán của mô hình
+        # 0 là "two", 1 là "five"
+        if handle_prediction(prediction) == 1:
+            if fan == 0:
+                print("Giấy")
+                fan = 1
+                check = 1
+        elif handle_prediction(prediction) == 0:
+            if fan == 1:
+                print("Kéo")
+                fan = 0
+                check = 1
 
-    # Display the hand landmarks on the frame
-    # if results.multi_hand_landmarks:
-    #     for landmarks in results.multi_hand_landmarks:
-    #         mp.drawing_utils.draw_landmarks(frame, landmarks, mp_hands.HAND_CONNECTIONS)
+    if check and checkOnOff:
+        print("fan: ", fan)
+        print("check: ", check)
+        # Gửi dữ liệu đến Firebase trong một luồng riêng
+        send_data_in_thread(fan)
+        check = 0
 
-    # Display the frame
-    cv2.imshow("Hand Tracking", frame)
+    cv2.imshow("Theo dõi Bàn tay", frame)
 
-    # Break the loop when 'q' is pressed
+    # Thoát khỏi vòng lặp khi nhấn 'q'
     if cv2.waitKey(1) & 0xFF == ord("q"):
+        exit.set()
         break
+    checkOnOff = get_data_from_firebase()
 
-# Release resources
+# Giải phóng tài nguyên
+hands.close()
 cap.release()
 cv2.destroyAllWindows()
 hands.close()
